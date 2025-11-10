@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resonance Field v4</title>
+  <meta name="description" content="Full biofield scan with quantum harmonics, voice, crystal, astrology. Deep personalized healing protocols."/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>"/>
+  <style>
+    :root {
+      --bg: #0a0a1a;
+      --accent: #ff6b6b;
+      --glow: #4ecdc4;
+      --text: #f8f9fa;
+      --card: #1a1a2e;
+      --secondary: #2d1b69;
+      --proto: #1e3a8a;
+      --quantum: #00d4ff;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+      padding: 2rem 1rem; line-height: 1.6;
+    }
+    h1 { font-size: 2.2rem; margin-bottom: 0.5rem; text-align: center; }
+    p { max-width: 600px; text-align: center; margin-bottom: 1.5rem; opacity: 0.9; }
+    .card {
+      background: var(--card); border-radius: 16px; padding: 1.5rem;
+      width: 100%; max-width: 600px; margin: 1rem 0; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,107,107,0.2);
+    }
+    button {
+      background: var(--accent); color: white; border: none; padding: 0.8rem 1.5rem;
+      border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; margin: 0.5rem 0;
+      transition: all 0.3s; font-size: 1.1rem;
+    }
+    button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,107,107,0.4); }
+    button:disabled { background: #555; cursor: not-allowed; }
+    select, input, textarea { width: 100%; padding: 0.8rem; margin: 0.5rem 0; border-radius: 8px; border: 1px solid #444; background: #222; color: white; }
+    .glow { text-shadow: 0 0 10px var(--glow); }
+    .pulse { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
+    canvas { border-radius: 12px; margin: 1rem 0; width: 100%; max-height: 200px; background: #000; }
+    #status { font-style: italic; color: var(--glow); margin: 1rem 0; text-align: center; }
+    .audio-controls { display: flex; gap: 1rem; margin-top: 1rem; }
+    .audio-controls button { width: auto; flex: 1; }
+    footer { margin-top: 3rem; font-size: 0.8rem; opacity: 0.6; }
+    .tab { display: none; }
+    .tab.active { display: block; }
+    .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .tabs button { width: auto; flex: 1; background: var(--secondary); }
+    .tabs button.active { background: var(--accent); }
+    video { width: 100%; max-height: 200px; border-radius: 12px; margin: 1rem 0; }
+    .hidden { display: none; }
+    .library-item { padding: 0.8rem; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+    .aura-result, .protocol { background: rgba(78,205,196,0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0; line-height: 1.8; }
+    .protocol { background: rgba(30,58,138,0.2); border: 1px solid var(--proto); }
+    .protocol h3 { color: var(--glow); margin-top: 1rem; }
+    .extra-scan { background: var(--secondary); padding: 0.8rem; border-radius: 8px; margin: 0.5rem 0; }
+    .quantum-badge { background: rgba(0,212,255,0.1); border: 1px solid var(--quantum); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.9rem; margin: 0.5rem 0; }
+  </style>
+</head>
+<body>
+  <h1 class="glow">Resonance Field v4</h1>
+  <p>Quantum Harmonics • Voice • Crystal • Full Protocols</p>
+
+  <div class="tabs">
+    <button class="active" onclick="openTab('scan')">SCAN</button>
+    <button onclick="openTab('library')">LIBRARY</button>
+    <button onclick="openTab('protocols')">PROTOCOLS</button>
+    <button onclick="openTab('extras')">EXTRAS</button>
+  </div>
+
+  <!-- SCAN TAB -->
+  <div id="scan" class="tab active">
+    <div class="card">
+      <h2>1. Personal Identity (Optional)</h2>
+      <input type="text" id="user-name" placeholder="Your Name (e.g., Alex)" />
+      <input type="text" id="birth-info" placeholder="Birth: YYYY-MM-DD HH:MM City (e.g., 1990-05-15 14:30 NYC)" />
+    </div>
+
+    <div class="card">
+      <h2>2. Intention</h2>
+      <select id="intention">
+        <option value="calm">Calm & Grounding</option>
+        <option value="focus">Focus & Clarity</option>
+        <option value="love">Love & Compassion</option>
+        <option value="healing">Physical Healing</option>
+        <option value="creativity">Creativity & Flow</option>
+        <option value="protection">Protection & Shielding</option>
+        <option value="abundance">Abundance & Manifestation</option>
+        <option value="sleep">Deep Sleep</option>
+        <option value="energy">Energy & Vitality</option>
+        <option value="custom">Custom</option>
+      </select>
+      <input type="text" id="custom-intention" placeholder="e.g., Confidence" class="hidden"/>
+    </div>
+
+    <div class="card">
+      <h2>3. Sound Methods</h2>
+      <label><input type="checkbox" value="binaural" checked> Binaural Beats</label><br>
+      <label><input type="checkbox" value="isochronic" checked> Isochronic Tones</label><br>
+      <label><input type="checkbox" value="solfeggio"> Solfeggio</label><br>
+      <label><input type="checkbox" value="rife"> Rife</label><br>
+      <label><input type="checkbox" value="schumann"> Schumann</label><br>
+      <label><input type="checkbox" value="nature"> Nature</label>
+      <label><input type="checkbox" value="quantum"> Quantum Harmonics</label>
+    </div>
+
+    <div class="card">
+      <h2>4. Duration</h2>
+      <select id="duration">
+        <option value="60">1 Min</option>
+        <option value="180">3 Min</option>
+        <option value="300" selected>5 Min</option>
+        <option value="600">10 Min</option>
+      </select>
+    </div>
+
+    <div class="card">
+      <h2>5. Core Scan: Camera PPG</h2>
+      <button id="start-ppg">START PPG SCAN</button>
+      <video id="video" autoplay muted playsinline class="hidden"></video>
+      <canvas id="ppg-canvas" width="320" height="240" class="hidden"></canvas>
+      <div id="ppg-status"></div>
+      <canvas id="visualizer" width="600" height="200"></canvas>
+      <div id="status"></div>
+      <button id="start-scan" class="hidden">GENERATE AUDIO + PROTOCOL</button>
+    </div>
+
+    <div class="card" id="audio-section" style="display:none;">
+      <h2>Your Resonance Track</h2>
+      <div id="aura-result" class="aura-result"></div>
+      <div id="quantum-result" class="quantum-badge hidden"></div>
+      <audio id="audio-player" controls style="width:100%;"></audio>
+      <div class="audio-controls">
+        <button id="download">Download</button>
+        <button id="save">Save to Library</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIBRARY TAB -->
+  <div id="library" class="tab">
+    <div class="card">
+      <h2>Your Resonance Library</h2>
+      <div id="library-list"></div>
+    </div>
+  </div>
+
+  <!-- PROTOCOLS TAB -->
+  <div id="protocols" class="tab">
+    <div class="card">
+      <h2>Personalized Healing Protocols</h2>
+      <div id="protocol-list"></div>
+    </div>
+  </div>
+
+  <!-- EXTRAS TAB -->
+  <div id="extras" class="tab">
+    <div class="card">
+      <h2>Extra Scans (Optional)</h2>
+      <div class="extra-scan">
+        <h3>Voice Analysis</h3>
+        <button id="start-voice">RECORD VOICE (3s)</button>
+        <div id="voice-result" class="hidden"></div>
+      </div>
+      <div class="extra-scan">
+        <h3>Crystal Resonance Scan</h3>
+        <button id="start-crystal">SCAN CRYSTAL</button>
+        <input type="file" id="crystal-upload" accept="image/*" class="hidden"/>
+        <div id="crystal-result" class="hidden"></div>
+      </div>
+      <div class="extra-scan">
+        <h3>Astrology</h3>
+        <input type="text" id="astro-input" placeholder="1990-05-15 14:30 NYC"/>
+        <button id="calc-astro">CALCULATE</button>
+        <div id="astro-result"></div>
+      </div>
+      <div class="extra-scan">
+        <h3>Handwriting Aura</h3>
+        <p>Upload photo of handwriting</p>
+        <input type="file" id="handwriting-upload" accept="image/*"/>
+        <div id="hand-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Resonance Field v4 © 2025 | <a href="#" style="color:var(--glow);">Privacy</a>
+  </footer>
+
+  <script>
+    // === CONFIG ===
+    const SOLFEGGIO = { calm:174, focus:396, love:528, healing:417, creativity:639, protection:741, abundance:888, sleep:432, energy:285 };
+    const RIFE = { healing:727, energy:20, calm:10, focus:15 };
+    const SCHUMANN = 7.83;
+    const NATURE_SOUNDS = ['rain', 'ocean', 'forest', 'fire'];
+    const ZODIAC = { Aries:1, Taurus:2, Gemini:3, Cancer:4, Leo:5, Virgo:6, Libra:7, Scorpio:8, Sagittarius:9, Capricorn:10, Aquarius:11, Pisces:12 };
+
+    // === ELEMENTS ===
+    const tabs = document.querySelectorAll('.tab');
+    const tabBtns = document.querySelectorAll('.tabs button');
+    const status = document.getElementById('status');
+    const ppgStatus = document.getElementById('ppg-status');
+    const canvas = document.getElementById('visualizer');
+    const ctx = canvas.getContext('2d');
+    const video = document.getElementById('video');
+    const ppgCanvas = document.getElementById('ppg-canvas');
+    const ppgCtx = ppgCanvas.getContext('2d');
+    const audioPlayer = document.getElementById('audio-player');
+    const audioSection = document.getElementById('audio-section');
+    const auraResult = document.getElementById('aura-result');
+    const quantumResult = document.getElementById('quantum-result');
+    const libraryList = document.getElementById('library-list');
+    const protocolList = document.getElementById('protocol-list');
+
+    // Global scan data
+    let scanData = {
+      hr: 75, breathRate: 0.2, fieldStrength: 0.8, roomResonance: 200,
+      voice: null, crystal: null, astro: null, handwriting: null
+    };
+
+    // === TAB SYSTEM ===
+    function openTab(tabName) {
+      tabs.forEach(t => t.classList.remove('active'));
+      tabBtns.forEach(b => b.classList.remove('active'));
+      document.getElementById(tabName).classList.add('active');
+      document.querySelector(`button[onclick="openTab('${tabName}')"]`).classList.add('active');
+      if (tabName === 'library') loadLibrary();
+      if (tabName === 'protocols') loadProtocols();
+    }
+
+    // === INTENTION CUSTOM ===
+    document.getElementById('intention').addEventListener('change', () => {
+      const custom = document.getElementById('custom-intention');
+      custom.classList.toggle('hidden', document.getElementById('intention').value !== 'custom');
+    });
+
+    // === CAMERA PPG ===
+    let ppgData = [];
+    async function startPPG() {
+      ppgStatus.innerHTML = 'Place finger over camera...';
+      video.classList.remove('hidden');
+      ppgCanvas.classList.remove('hidden');
+      document.getElementById('start-ppg').disabled = true;
+
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+      video.srcObject = stream;
+
+      const processFrame = () => {
+        ppgCtx.drawImage(video, 0, 0, 320, 240);
+        const imageData = ppgCtx.getImageData(0, 0, 320, 240);
+        let red = 0;
+        for (let i = 0; i < imageData.data.length; i += 4) red += imageData.data[i];
+        red /= (imageData.data.length / 4);
+        ppgData.push(red);
+        if (ppgData.length > 300) ppgData.shift();
+
+        if (ppgData.length > 100) {
+          const diffs = ppgData.slice(1).map((v, i) => v - ppgData[i]);
+          const peaks = diffs.filter((d, i) => i > 0 && diffs[i-1] > 0 && d < 0);
+          if (peaks.length > 5) {
+            const ibi = 300 / peaks.length * 60;
+            scanData.hr = Math.round(ibi);
+            scanData.breathRate = 0.15 + (scanData.hr - 60) / 300;
+            ppgStatus.innerHTML = `HR: ${scanData.hr} BPM | Breath: ${(scanData.breathRate*60).toFixed(1)}/min`;
+            drawPPG();
+          }
+        }
+        requestAnimationFrame(processFrame);
+      };
+      video.onloadedmetadata = () => { video.play(); processFrame(); };
+
+      setTimeout(() => {
+        video.classList.add('hidden');
+        ppgCanvas.classList.add('hidden');
+        ppgStatus.innerHTML = `Locked: ${scanData.hr} BPM`;
+        document.getElementById('start-scan').classList.remove('hidden');
+      }, 8000);
+    }
+    document.getElementById('start-ppg').addEventListener('click', startPPG);
+
+    function drawPPG() {
+      const w = ppgCanvas.width, h = ppgCanvas.height;
+      ppgCtx.fillStyle = '#000'; ppgCtx.fillRect(0, 0, w, h);
+      ppgCtx.strokeStyle = '#4ecdc4'; ppgCtx.lineWidth = 2;
+      ppgCtx.beginPath();
+      ppgData.forEach((v, i) => {
+        const x = i * w / ppgData.length;
+        const y = h - (v - 100) * 2;
+        i === 0 ? ppgCtx.moveTo(x, y) : ppgCtx.lineTo(x, y);
+      });
+      ppgCtx.stroke();
+    }
+
+    // === VOICE ANALYSIS ===
+    let voiceRecorder;
+    document.getElementById('start-voice').addEventListener('click', async () => {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      voiceRecorder = new MediaRecorder(stream);
+      const chunks = [];
+      voiceRecorder.ondataavailable = e => chunks.push(e.data);
+      voiceRecorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'audio/wav' });
+        analyzeVoice(blob);
+      };
+      voiceRecorder.start();
+      setTimeout(() => voiceRecorder.stop(), 3000);
+      document.getElementById('start-voice').textContent = 'Recording...';
+    });
+
+    function analyzeVoice(blob) {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audio.onloadedmetadata = () => {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const reader = new FileReader();
+        reader.onload = function() {
+          ctx.decodeAudioData(reader.result, buffer => {
+            const data = buffer.getChannelData(0);
+            const rms = Math.sqrt(data.reduce((s, v) => s + v*v, 0) / data.length);
+            const pitch = detectPitch(data, buffer.sampleRate);
+            scanData.voice = { rms: rms.toFixed(3), pitch: pitch.toFixed(1) };
+            document.getElementById('voice-result').classList.remove('hidden');
+            document.getElementById('voice-result').innerHTML = `<strong>Voice:</strong> Energy ${rms > 0.1 ? 'High' : 'Low'} | Pitch ${pitch} Hz`;
+            document.getElementById('start-voice').textContent = 'RECORD VOICE (3s)';
+          });
+        };
+        reader.readAsArrayBuffer(blob);
+      };
+    }
+
+    function detectPitch(data, rate) {
+      let maxCorr = 0, bestLag = 0;
+      for (let lag = 80; lag < 1000; lag++) {
+        let corr = 0;
+        for (let i = 0; i < data.length - lag; i++) corr += data[i] * data[i + lag];
+        if (corr > maxCorr) { maxCorr = corr; bestLag = lag; }
+      }
+      return bestLag > 0 ? rate / bestLag : 0;
+    }
+
+    // === CRYSTAL SCAN ===
+    document.getElementById('start-crystal').addEventListener('click', () => {
+      document.getElementById('crystal-upload').click();
+    });
+    document.getElementById('crystal-upload').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width; canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let r=0,g=0,b=0,n=0;
+        for (let i = 0; i < data.length; i += 4) {
+          r += data[i]; g += data[i+1]; b += data[i+2]; n++;
+        }
+        r /= n; g /= n; b /= n;
+        const hue = rgbToHsl(r,g,b)[0] * 360;
+        const freq = 174 + (hue / 360) * (963 - 174);
+        scanData.crystal = { hue: Math.round(hue), freq: Math.round(freq) };
+        document.getElementById('crystal-result').classList.remove('hidden');
+        document.getElementById('crystal-result').innerHTML = `<strong>Crystal:</strong> Hue ${Math.round(hue)}° → ${Math.round(freq)} Hz`;
+      };
+      img.src = URL.createObjectURL(file);
+    });
+
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+      if (max === min) h = s = 0;
+      else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+      }
+      return [h, s, l];
+    }
+
+    // === ASTRO & HANDWRITING (unchanged) ===
+    document.getElementById('calc-astro').addEventListener('click', () => {
+      const input = document.getElementById('astro-input').value;
+      const match = input.match(/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}) (.+)/);
+      if (!match) return alert('Format: YYYY-MM-DD HH:MM City');
+      const [, y, m, d] = match;
+      const date = new Date(`${y}-${m}-${d}`);
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const sun = (month === 1 ? (day < 20 ? 10 : 11) : month === 2 ? (day < 19 ? 11 : 12) : month === 3 ? (day < 21 ? 12 : 1) : month === 4 ? (day < 20 ? 1 : 2) : month === 5 ? (day < 21 ? 2 : 3) : month === 6 ? (day < 21 ? 3 : 4) : month === 7 ? (day < 23 ? 4 : 5) : month === 8 ? (day < 23 ? 5 : 6) : month === 9 ? (day < 23 ? 6 : 7) : month === 10 ? (day < 23 ? 7 : 8) : month === 11 ? (day < 22 ? 8 : 9) : (day < 22 ? 9 : 10));
+      const freq = [432, 415, 440, 417, 528, 639, 741, 852, 963, 320, 384, 480][sun-1];
+      scanData.astro = freq;
+      document.getElementById('astro-result').innerHTML = `<strong>Sun Sign:</strong> ${['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'][sun-1]} → ${freq} Hz`;
+    });
+
+    document.getElementById('handwriting-upload').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width; canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let dark = 0, total = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          const lum = 0.3*data[i] + 0.6*data[i+1] + 0.1*data[i+2];
+          if (lum < 100) dark++;
+          total++;
+        }
+        const pressure = (dark / total * 100).toFixed(1);
+        scanData.handwriting = pressure;
+        document.getElementById('hand-result').innerHTML = `<strong>Handwriting:</strong> Pressure ${pressure}%`;
+      };
+      img.src = URL.createObjectURL(file);
+    });
+
+    // === FIELD VISUALIZER ===
+    function drawField(strength, pulse) {
+      let phase = 0;
+      const animate = () => {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = `rgba(78, 205, 196, ${strength})`;
+        const radius = 80 + 40 * Math.sin(phase);
+        ctx.beginPath();
+        ctx.arc(canvas.width/2, canvas.height/2, radius, 0, Math.PI*2);
+        ctx.fill();
+        phase += pulse * 0.1;
+        if (status.innerText.includes('Generating')) requestAnimationFrame(animate);
+      };
+      animate();
+    }
+
+    // === AUDIO GENERATION ===
+    function generateAudio(intention, methods, duration, extras) {
+      const sampleRate = 44100;
+      const samples = duration * sampleRate;
+      const buffer = new Float32Array(samples);
+      let t = 0;
+
+      const intent = intention === 'custom' ? document.getElementById('custom-intention').value.toLowerCase() : intention;
+      let carrierFreq = scanData.roomResonance || 200;
+      if (methods.includes('solfeggio') && SOLFEGGIO[intent]) carrierFreq = SOLFEGGIO[intent];
+      if (extras.astro) carrierFreq = extras.astro;
+      if (extras.crystal) carrierFreq = extras.crystal.freq;
+
+      let leftFreq = carrierFreq, rightFreq = carrierFreq;
+      if (methods.includes('binaural')) {
+        const beat = extras.hrv ? 4 + extras.hrv * 6 : scanData.breathRate * 60;
+        leftFreq = carrierFreq;
+        rightFreq = carrierFreq + beat;
+      }
+
+      let isochronicPulse = methods.includes('isochronic') ? 2 + Math.random() * 6 : 0;
+      let rifeMod = methods.includes('rife') && RIFE[intent] ? RIFE[intent] : 0;
+      let schumann = methods.includes('schumann') ? SCHUMANN : 0;
+      let natureNoise = methods.includes('nature') ? 0.03 + Math.random() * 0.03 : 0;
+
+      // Quantum Harmonics Layer
+      let quantumLayer = 0;
+      if (methods.includes('quantum')) {
+        const qBase = extras.voice ? extras.voice.pitch : carrierFreq;
+        const qMod = extras.crystal ? extras.crystal.freq : 528;
+        quantumLayer = 0.15 * Math.sin(2 * Math.PI * (qBase + qMod) / 2 * t);
+      }
+
+      for (let i = 0; i < samples; i++) {
+        t = i / sampleRate;
+        let wave = Math.sin(2 * Math.PI * carrierFreq * t);
+
+        if (methods.includes('binaural')) {
+          const left = Math.sin(2 * Math.PI * leftFreq * t);
+          const right = Math.sin(2 * Math.PI * rightFreq * t);
+          wave = (left + right) * 0.5;
+        }
+
+        if (isochronicPulse && Math.sin(2 * Math.PI * isochronicPulse * t) > 0.8) wave *= 1.5;
+        if (rifeMod > 0) wave *= (1 + 0.3 * Math.sin(2 * Math.PI * rifeMod * t));
+        if (schumann > 0) wave += 0.1 * Math.sin(2 * Math.PI * schumann * t);
+        if (natureNoise > 0) wave += natureNoise * (Math.random() - 0.5);
+        if (extras.voice) wave *= (1 + 0.2 * Math.sin(2 * Math.PI * extras.voice.pitch * t));
+        if (quantumLayer) wave += quantumLayer;
+
+        buffer[i] = wave * 0.3;
+      }
+      return buffer;
+    }
+
+    function bufferToWav(buffer) {
+      const length = buffer.length;
+      const arrayBuffer = new ArrayBuffer(44 + length * 2);
+      const view = new DataView(arrayBuffer);
+      const writeString = (offset, string) => {
+        for (let i = 0; i < string.length; i++) view.setUint8(offset + i, string.charCodeAt(i));
+      };
+      writeString(0, 'RIFF');
+      view.setUint32(4, 36 + length * 2, true);
+      writeString(8, 'WAVE');
+      writeString(12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true);
+      view.setUint16(22, 1, true);
+      view.setUint32(24, 44100, true);
+      view.setUint32(28, 44100 * 2, true);
+      view.setUint16(32, 2, true);
+      view.setUint16(34, 16, true);
+      writeString(36, 'data');
+      view.setUint32(40, length * 2, true);
+      let offset = 44;
+      for (let i = 0; i < length; i++) {
+        const sample = Math.max(-1, Math.min(1, buffer[i]));
+        view.setInt16(offset, sample * 0x7FFF, true);
+        offset += 2;
+      }
+      return new Blob([arrayBuffer], { type: 'audio/wav' });
+    }
+
+    // === EXPANDED BREATHWORK VARIATIONS ===
+    function getBreathworkProtocol(scan, intent) {
+      const hr = scan.hr;
+      const variations = [];
+
+      if (hr > 85) {
+        variations.push({
+          name: "4-4-4-4 Box Breath (Anxiety Reset)",
+          steps: "Inhale 4s → Hold 4s → Exhale 4s → Hold 4s",
+          cycles: "9 cycles"
+        });
+        variations.push({
+          name: "4-7-8 Calming Flow",
+          steps: "Inhale 4s → Hold 7s → Exhale 8s",
+          cycles: "4 cycles"
+        });
+      } else if (hr > 70) {
+        variations.push({
+          name: "Coherent Heart Rhythm (6 breaths/min)",
+          steps: "Inhale 5s → Exhale 5s",
+          cycles: "3–5 minutes"
+        });
+        variations.push({
+          name: "Alternate Nostril (Nadi Shodhana)",
+          steps: "Right nostril in → Left out → Left in → Right out",
+          cycles: "6 rounds"
+        });
+      } else {
+        variations.push({
+          name: "Deep Diaphragmatic Expansion",
+          steps: "Inhale 6s into belly → Exhale 8s",
+          cycles: "7 minutes"
+        });
+        variations.push({
+          name: "Bhramari Humming Breath",
+          steps: "Inhale → Exhale with 'Mmm' hum",
+          cycles: "9 rounds"
+        });
+      }
+
+      return variations;
+    }
+
+    // === PROTOCOL ENGINE ===
+    function generateProtocol(scan, intent, name) {
+      const proto = { name: `${name}'s ${intent} Protocol`, date: new Date().toLocaleString(), sections: [] };
+
+      // Breathwork (Expanded)
+      const breathworks = getBreathworkProtocol(scan, intent);
+      let breathContent = `<strong>Primary:</strong> ${breathworks[0].name}\n${breathworks[0].steps}\n${breathworks[0].cycles}\n\n`;
+      if (breathworks[1]) breathContent += `<strong>Secondary:</strong> ${breathworks[1].name}\n${breathworks[1].steps}\n${breathworks[1].cycles}`;
+      proto.sections.push({ title: 'Breathwork', content: breathContent });
+
+      // Visualization
+      const color = scan.crystal ? `Visualize ${['red','orange','yellow','green','blue','indigo','violet'][Math.floor(scan.crystal.hue/60)%7]} light` : 'Golden light';
+      proto.sections.push({ title: 'Visualization', content: `${color} filling your field\n- See it expand with each breath\n- Dissolve blocks as mist\n- Anchor in heart center` });
+
+      // Yoga / Movement
+      const pose = intent === 'healing' ? 'Child’s Pose' : intent === 'energy' ? 'Sun Salutation' : intent === 'calm' ? 'Legs Up Wall' : 'Cat-Cow Flow';
+      proto.sections.push({ title: 'Yoga Flow', content: `${pose}\n- 3–5 rounds\n- Sync breath to movement\n- Feel resonance in spine` });
+
+      // Shadow / Journal
+      const shadow = intent === 'love' ? 'Where do I withhold love?' : intent === 'abundance' ? 'What scarcity story do I repeat?' : 'What fear blocks this intention?';
+      proto.sections.push({ title: 'Shadow Work', content: `Journal Prompt:\n"${shadow}"\n- Write stream of consciousness\n- Burn or bury page to release` });
+
+      // Ritual
+      const ritual = scan.voice ? `Chant your name 9 times at ${scan.voice.pitch} Hz` : `Hold crystal to third eye, state intention 3x`;
+      proto.sections.push({ title: 'Closing Ritual', content: `${ritual}\n- Seal with gratitude\n- Drink charged water` });
+
+      return proto;
+    }
+
+    function saveProtocol(proto) {
+      const library = JSON.parse(localStorage.getItem('resonance_protocols') || '[]');
+      library.push(proto);
+      localStorage.setItem('resonance_protocols', JSON.stringify(library));
+    }
+
+    function loadProtocols() {
+      const library = JSON.parse(localStorage.getItem('resonance_protocols') || '[]');
+      protocolList.innerHTML = library.length ? '' : '<p>No protocols yet.</p>';
+      library.forEach((p, i) => {
+        const div = document.createElement('div');
+        div.className = 'protocol';
+        let html = `<strong>${p.name}</strong><br><small>${p.date}</small>`;
+        p.sections.forEach(s => {
+          html += `<h3>${s.title}</h3><pre style="white-space: pre-wrap; font-family: inherit;">${s.content}</pre>`;
+        });
+        div.innerHTML = html;
+        protocolList.appendChild(div);
+      });
+    }
+
+    // === LIBRARY ===
+    function loadLibrary() {
+      const library = JSON.parse(localStorage.getItem('resonance_library') || '[]');
+      libraryList.innerHTML = library.length ? '' : '<p>No tracks yet.</p>';
+      library.forEach((track, i) => {
+        const div = document.createElement('div');
+        div.className = 'library-item';
+        div.innerHTML = `
+          <div><strong>${track.name}</strong><br><small>${track.date}</small></div>
+          <button onclick="playLibrary(${i})">Play</button>
+        `;
+        libraryList.appendChild(div);
+      });
+    }
+
+    window.playLibrary = (i) => {
+      const library = JSON.parse(localStorage.getItem('resonance_library') || '[]');
+      const track = library[i];
+      audioPlayer.src = track.url;
+      audioSection.style.display = 'block';
+      status.innerHTML = `Playing: <strong>${track.name}</strong>`;
+      openTab('scan');
+    };
+
+    // === MAIN SCAN ===
+    document.getElementById('start-scan').addEventListener('click', async () => {
+      const intention = document.getElementById('intention').value === 'custom' ? document.getElementById('custom-intention').value : document.getElementById('intention').value;
+      const duration = parseInt(document.getElementById('duration').value);
+      const methods = Array.from(document.querySelectorAll('input[type=checkbox]:checked')).map(c => c.value);
+      const name = document.getElementById('user-name').value || 'Soul';
+
+      const extras = {};
+      if (scanData.voice) extras.voice = scanData.voice;
+      if (scanData.crystal) extras.crystal = scanData.crystal;
+      if (scanData.astro) extras.astro = scanData.astro;
+      extras.hrv = (scanData.hr - 70) / 40;
+
+      status.innerHTML = 'Generating resonance + protocol...';
+      drawField(0.8, scanData.breathRate);
+
+      const audioBuffer = generateAudio(intention, methods, duration, extras);
+      const blob = bufferToWav(audioBuffer);
+      const url = URL.createObjectURL(blob);
+
+      audioPlayer.src = url;
+      audioSection.style.display = 'block';
+
+      // Aura Result
+      let aura = `<strong>${name}'s Field:</strong><br>HR: ${scanData.hr} BPM | Breath: ${(scanData.breathRate*60).toFixed(1)}/min<br>`;
+      if (scanData.voice) aura += `Voice: ${scanData.voice.pitch} Hz<br>`;
+      if (scanData.crystal) aura += `Crystal: ${scanData.crystal.freq} Hz<br>`;
+      if (scanData.astro) aura += `Astro: ${scanData.astro} Hz<br>`;
+      aura += `Intention: ${intention.toUpperCase()}`;
+      auraResult.innerHTML = aura;
+
+      // Quantum Harmonics Badge
+      if (methods.includes('quantum')) {
+        const qFreq = extras.voice && extras.crystal ? (extras.voice.pitch + extras.crystal.freq) / 2 : 528;
+        quantumResult.classList.remove('hidden');
+        quantumResult.innerHTML = `Quantum Harmonics Layer: ${Math.round(qFreq)} Hz`;
+      } else {
+        quantumResult.classList.add('hidden');
+      }
+
+      // Generate & Save Protocol
+      const proto = generateProtocol(scanData, intention, name);
+      saveProtocol(proto);
+
+      document.getElementById('download').onclick = () => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `resonance_${name}_${intention}_${new Date().toISOString().slice(0,10)}.wav`;
+        a.click();
+      };
+
+      document.getElementById('save').onclick = () => {
+        const library = JSON.parse(localStorage.getItem('resonance_library') || '[]');
+        library.push({ name: `${name}'s ${intention}`, date: new Date().toLocaleString(), url });
+        localStorage.setItem('resonance_library', JSON.stringify(library));
+        alert('Saved to Library!');
+      };
+
+      status.innerHTML = `Complete: <strong>${intention.toUpperCase()} RESONANCE + PROTOCOL</strong>`;
+    });
+
+    // Init
+    loadLibrary();
+    loadProtocols();
+  </script>
+</body>
+</html>
